@@ -40,10 +40,20 @@ function handleDiscordLogin() {
   const redirect = localStorage.getItem('cl_pending_redirect') || window.location.pathname;
   localStorage.setItem('cl_pending_redirect', redirect);
 
+  // Dynamic redirect URI based on environment
+  const currentRedirectUri = (
+    window.location.hostname === 'localhost' || 
+    window.location.hostname === '127.0.0.1' || 
+    window.location.hostname.startsWith('192.168.') ||
+    window.location.hostname.endsWith('.local')
+  )
+    ? 'http://localhost:8787/api/auth/discord/callback'
+    : 'https://craftlandia-ugyfelkapu.koalabalazsnemeth.workers.dev/api/auth/discord/callback';
+
   // Discord OAuth2 params – redirect to Worker which handles token exchange
   const params = new URLSearchParams({
     client_id: '1246462744870256731', 
-    redirect_uri: 'http://localhost:8787/api/auth/discord/callback',
+    redirect_uri: currentRedirectUri,
     response_type: 'code',
     scope: 'identify email',
     state: generateState(),
