@@ -8,7 +8,7 @@ const API_BASE = (
   window.location.hostname.endsWith('.local')
 )
   ? 'http://localhost:8787/api'
-  : 'https://ugyfelkapu.craftlandia.gov/api';
+  : 'https://craftlandia-ugyfelkapu.koalabalazsnemeth.workers.dev/api';
 
 
 // ─── Session ───────────────────────────────────────────────
@@ -92,6 +92,10 @@ function handleOAuthReturn() {
         user,
         expires_at: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
       });
+
+      // Discord szerver meghívó megnyitása új lapon
+      window.open('http://discord.com/invite/hMpPVCXnah', '_blank');
+
       window.history.replaceState({}, '', window.location.pathname);
       const redirect = localStorage.getItem('cl_pending_redirect') || 'index.html';
       localStorage.removeItem('cl_pending_redirect');

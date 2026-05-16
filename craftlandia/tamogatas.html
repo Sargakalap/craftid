@@ -30,7 +30,7 @@
       <p class="text-[#1a1a18]/60">Pályázatok, szociális segélyek és vállalkozásfejlesztési források.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
       <!-- Lakhatási támogatás -->
       <div class="bg-white border border-[#1a1a18]/10 p-8 flex flex-col h-full">
         <h3 class="font-garamond text-2xl font-medium mb-4">Lakhatási Támogatás</h3>
@@ -38,15 +38,64 @@
         <button onclick="alert('Jelenleg nincs nyitott pályázati ablak ebben a kategóriában.')" class="btn-secondary w-full py-3">Részletek</button>
       </div>
 
-      <!-- Vállalkozásfejlesztés -->
-      <div class="bg-[#1a1a18] border border-[#1a1a18] p-8 flex flex-col h-full text-white">
-        <h3 class="font-garamond text-2xl font-medium mb-4">Startup Inkubátor 2026</h3>
-        <p class="text-sm text-white/50 mb-8 flex-1">Új vállalkozások indításához szükséges eszközbeszerzési támogatás. Maximális összeg: 500 000 KF.</p>
-        <button onclick="alert('Hamarosan indul a jelentkezés!')" class="btn-primary bg-white text-[#1a1a18] w-full py-3 hover:bg-white/90">Pályázás</button>
+      <!-- EU Támogatás -->
+      <div id="eu-apply-container" class="bg-[#003399] border border-[#003399] p-8 flex flex-col h-full text-white">
+        <h3 class="font-garamond text-2xl font-medium mb-4">EU-s Gazdaságélénkítő Támogatás</h3>
+        <p class="text-sm text-white/70 mb-8 flex-1">Vállalkozások számára elérhető 250 KF keretösszegű pályázat eszközbeszerzésre és fejlesztésre.</p>
+        <div class="font-mono text-xs mb-4 p-3 bg-white/10 border border-white/20">Maximális támogatás: 25.0 KF / pályázat</div>
+        <button onclick="document.getElementById('grant-modal').classList.remove('hidden')" class="btn-primary bg-white text-[#003399] w-full py-3 hover:bg-white/90">Pályázás indítása</button>
+      </div>
+    </div>
+
+    <!-- My Applications Section (Hidden if empty) -->
+    <section id="my-apps-section" class="hidden mb-12">
+      <div class="flex items-center gap-4 mb-6">
+        <h2 class="font-garamond text-2xl font-medium">Benyújtott pályázataim</h2>
+        <div class="h-px flex-1 bg-[#1a1a18]/10"></div>
+      </div>
+      <div id="my-applications-list" class="grid grid-cols-1 gap-4">
+        <!-- Dynamic content -->
+      </div>
+    </section>
+
+    <!-- Grant Modal -->
+    <div id="grant-modal" class="hidden fixed inset-0 bg-[#1a1a18]/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-2xl p-8 animate-fade-in relative">
+        <button onclick="document.getElementById('grant-modal').classList.add('hidden')" class="absolute top-6 right-6 text-[#1a1a18]/40 hover:text-[#1a1a18] text-2xl">✕</button>
+        
+        <h2 class="font-garamond text-3xl font-medium mb-6">Támogatási pályázat benyújtása</h2>
+        
+        <form id="grant-form" onsubmit="handleGrantSubmit(event)" class="space-y-6">
+          <div class="space-y-2">
+            <label class="block font-mono text-[10px] uppercase text-[#1a1a18]/40">Vállalkozás kiválasztása *</label>
+            <select id="ceg_id" required class="w-full border-b border-[#1a1a18]/20 py-2 focus:outline-none focus:border-[#003399] bg-transparent">
+              <option value="">Betöltés...</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block font-mono text-[10px] uppercase text-[#1a1a18]/40">Projekt megnevezése *</label>
+              <input type="text" id="project_name" required placeholder="pl. Kereskedelmi szoftver fejlesztés" class="w-full border-b border-[#1a1a18]/20 py-2 focus:outline-none focus:border-[#003399] bg-transparent" />
+            </div>
+            <div class="space-y-2">
+              <label class="block font-mono text-[10px] uppercase text-[#1a1a18]/40">Igényelt összeg (KF) *</label>
+              <input type="number" id="amount" required step="0.1" max="25" placeholder="Max. 25.0 KF" class="w-full border-b border-[#1a1a18]/20 py-2 focus:outline-none focus:border-[#003399] bg-transparent" />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block font-mono text-[10px] uppercase text-[#1a1a18]/40">Célkitűzés és leírás *</label>
+            <textarea id="description" rows="4" required placeholder="Részletezze a támogatás felhasználásának módját..." class="w-full border border-[#1a1a18]/10 p-4 focus:outline-none focus:border-[#003399] bg-[#1a1a18]/02"></textarea>
+          </div>
+
+          <button type="submit" id="submit-btn" class="w-full bg-[#003399] text-white py-4 font-mono text-xs uppercase tracking-widest hover:bg-[#002266] transition-all">Pályázat benyújtása</button>
+        </form>
       </div>
     </div>
   </main>
 
   <script src="auth.js"></script>
+  <script src="tamogatas.js"></script>
 </body>
 </html>

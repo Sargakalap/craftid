@@ -26,3 +26,8 @@ command = ""
 [dev]
 port = 8787
 local_protocol = "http"
+
+# ─── Observability ──────────────────────────────────────────
+[observability.logs]
+enabled = false
+invocation_logs = true

@@ -188,17 +188,26 @@
   <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
     <div class="flex justify-between items-center mb-5">
       <h2 class="font-garamond text-xl font-medium text-blue-900">Adó 1% Felajánlás (Opcionális)</h2>
-      <span class="badge bg-blue-50 text-blue-800 border border-blue-100">Közhasznú</span>
+      <span class="badge bg-blue-50 text-blue-800 border border-blue-100">Civil Szféra</span>
     </div>
-    <p class="text-sm text-[#1a1a18]/50 mb-5 leading-relaxed">Rendelkezzen adója 1%-áról egy választott Craftlandiai civil szervezet javára.</p>
+    <p class="text-sm text-[#1a1a18]/50 mb-5 leading-relaxed">Válassza ki a keresővel a támogatni kívánt alapítványt, vagy adja meg az adatokat manuálisan.</p>
+    
+    <div class="mb-6 relative">
+      <label class="block font-mono text-[10px] uppercase text-[#1a1a18]/40 mb-2">Alapítvány keresése név alapján</label>
+      <input type="text" id="foundation-search" placeholder="Kezdjen el gépelni a kereséshez (pl. Macskamentők)..." oninput="searchFoundation(this.value)" class="w-full bg-[#1a1a18]/05 border-0 border-b border-[#1a1a18]/10 py-3 px-4 focus:ring-0 focus:border-blue-800 transition-all font-medium" />
+      <div id="foundation-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-[#1a1a18]/15 shadow-xl z-50 max-h-60 overflow-y-auto">
+        <!-- Results -->
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label>Kedvezményezett szervezet adószáma</label>
-        <input type="text" id="ado1-adoszam" placeholder="pl. 12345678-1-12" class="font-mono" />
+        <label>Kedvezményezett adószáma</label>
+        <input type="text" id="ado1-adoszam" placeholder="pl. 12345678-1-12" class="font-mono bg-[#1a1a18]/02" />
       </div>
       <div>
         <label>Szervezet neve</label>
-        <input type="text" id="ado1-nev" placeholder="pl. Craftlandiai Macskamentők Alapítvány" />
+        <input type="text" id="ado1-nev" placeholder="pl. Craftlandiai Macskamentők Alapítvány" class="bg-[#1a1a18]/02" />
       </div>
     </div>
   </div>

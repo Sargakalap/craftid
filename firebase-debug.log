@@ -258,3 +258,93 @@
 [debug] [2026-05-16T08:27:17.160Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo {"name":"projects/picklechat-e509c/billingInfo","projectId":"picklechat-e509c","billingAccountName":"","billingEnabled":false}
 [debug] [2026-05-16T08:27:17.160Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
 [debug] [2026-05-16T08:27:17.160Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)
+[debug] [2026-05-16T09:22:13.683Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-16T09:22:13.685Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)
+[debug] [2026-05-16T09:22:13.685Z] Checked if tokens are valid: false, expires at: 1778923633108
+[debug] [2026-05-16T09:22:13.686Z] Checked if tokens are valid: false, expires at: 1778923633108
+[debug] [2026-05-16T09:22:13.686Z] > refreshing access token with scopes: []
+[debug] [2026-05-16T09:22:13.687Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-16T09:22:13.687Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-16T09:22:13.688Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-16T09:22:13.688Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)
+[debug] [2026-05-16T09:22:13.688Z] Checked if tokens are valid: false, expires at: 1778923633108
+[debug] [2026-05-16T09:22:13.689Z] Checked if tokens are valid: false, expires at: 1778923633108
+[debug] [2026-05-16T09:22:13.689Z] > refreshing access token with scopes: []
+[debug] [2026-05-16T09:22:13.689Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-16T09:22:13.689Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-16T09:22:13.793Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-16T09:22:13.793Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-16T09:22:13.826Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo [none]
+[debug] [2026-05-16T09:22:13.827Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-16T09:22:13.827Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-16T09:22:13.848Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo [none]
+[debug] [2026-05-16T09:22:14.219Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo 200
+[debug] [2026-05-16T09:22:14.219Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo {"name":"projects/picklechat-e509c/billingInfo","projectId":"picklechat-e509c","billingAccountName":"","billingEnabled":false}
+[debug] [2026-05-16T09:22:14.227Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.227Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.228Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.228Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.239Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.239Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.240Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.240Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.240Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-05-16T09:22:14.240Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.241Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-05-16T09:22:14.241Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.242Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com [none]
+[debug] [2026-05-16T09:22:14.242Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.243Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com [none]
+[debug] [2026-05-16T09:22:14.243Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.638Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo 200
+[debug] [2026-05-16T09:22:14.638Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo {"name":"projects/picklechat-e509c/billingInfo","projectId":"picklechat-e509c","billingAccountName":"","billingEnabled":false}
+[debug] [2026-05-16T09:22:14.639Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.639Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.639Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.639Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.643Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.643Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.644Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.644Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:14.644Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-05-16T09:22:14.644Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.645Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-05-16T09:22:14.645Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.646Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com [none]
+[debug] [2026-05-16T09:22:14.646Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:14.647Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com [none]
+[debug] [2026-05-16T09:22:14.647Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com x-goog-quota-user=projects/picklechat-e509c
+[debug] [2026-05-16T09:22:15.133Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com 403
+[debug] [2026-05-16T09:22:15.133Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com [omitted]
+[debug] [2026-05-16T09:22:15.163Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com 200
+[debug] [2026-05-16T09:22:15.163Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-05-16T09:22:15.194Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com 200
+[debug] [2026-05-16T09:22:15.194Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2026-05-16T09:22:15.218Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-05-16T09:22:15.218Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2026-05-16T09:22:15.467Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com 403
+[debug] [2026-05-16T09:22:15.467Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseio.com [omitted]
+[debug] [2026-05-16T09:22:15.551Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-05-16T09:22:15.551Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2026-05-16T09:22:15.553Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com 200
+[debug] [2026-05-16T09:22:15.553Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2026-05-16T09:22:15.568Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com 200
+[debug] [2026-05-16T09:22:15.568Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/picklechat-e509c/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-05-16T09:22:15.623Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-16T09:22:15.623Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)
+[debug] [2026-05-16T09:22:15.623Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:15.624Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:15.624Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo [none]
+[debug] [2026-05-16T09:22:15.802Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo 200
+[debug] [2026-05-16T09:22:15.802Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo {"name":"projects/picklechat-e509c/billingInfo","projectId":"picklechat-e509c","billingAccountName":"","billingEnabled":false}
+[debug] [2026-05-16T09:22:15.806Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-16T09:22:15.807Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)
+[debug] [2026-05-16T09:22:15.858Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-16T09:22:15.858Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)
+[debug] [2026-05-16T09:22:15.858Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:15.858Z] Checked if tokens are valid: true, expires at: 1778926932827
+[debug] [2026-05-16T09:22:15.858Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo [none]
+[debug] [2026-05-16T09:22:16.054Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo 200
+[debug] [2026-05-16T09:22:16.055Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/picklechat-e509c/billingInfo {"name":"projects/picklechat-e509c/billingInfo","projectId":"picklechat-e509c","billingAccountName":"","billingEnabled":false}
+[debug] [2026-05-16T09:22:16.057Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-16T09:22:16.057Z] > authorizing via signed-in user (koalabalazsnemeth@gmail.com)

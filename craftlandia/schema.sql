@@ -175,6 +175,24 @@ CREATE TABLE IF NOT EXISTS panaszok (
   created_at    TEXT NOT NULL
 );
 
+-- ─── EU Pályázatok (Támogatások) ───────────────────────────
+CREATE TABLE IF NOT EXISTS eu_applications (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  ugy_szam     TEXT    NOT NULL UNIQUE,  -- pl. TAM-2025-XXXX
+  discord_id   TEXT    NOT NULL,
+  ceg_id       INTEGER NOT NULL,
+  project_name TEXT    NOT NULL,
+  amount       REAL    NOT NULL,
+  description  TEXT,
+  status       TEXT    NOT NULL DEFAULT 'pending', -- pending | approved | rejected | paid
+  progress     INTEGER NOT NULL DEFAULT 0,
+  created_at   TEXT    NOT NULL,
+  FOREIGN KEY(ceg_id) REFERENCES cegek(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_eu_app_discord ON eu_applications(discord_id);
+CREATE INDEX IF NOT EXISTS idx_eu_app_status  ON eu_applications(status);
+
 -- ─── Seed: EU projektek ────────────────────────────────────
 INSERT OR IGNORE INTO eu_projects (project_id, name, municipality, category, amount, paid, status, progress, description, date) VALUES
 ('EU-2025-001','Bazsi City Főtér Felújítás','Bazsi City','infrastructure',450000,450000,'paid',100,'A főtér teljes infrastrukturális megújítása.','2025-03-15'),

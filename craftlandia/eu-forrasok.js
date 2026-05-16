@@ -45,12 +45,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderSummary();
   renderTable();
   renderCategoryCards();
+  
+  // Pool logic
+  updatePoolStatus();
+  
+  if (isLoggedIn()) {
+    loadMyApplications();
+  }
 
   // Live search
   document.getElementById('search-input').addEventListener('input', () => {
     currentPage = 1;
     applyFilters();
   });
+
+  // Apply form submit
+  document.getElementById('apply-form')?.addEventListener('submit', handleApplySubmit);
 });
 
 async function loadProjects() {
@@ -59,6 +69,32 @@ async function loadProjects() {
     if (data && Array.isArray(data.projects)) return data.projects;
   } catch (_) {}
   return MOCK_PROJECTS;
+}
+
+// ─── Pool Status (250 KF) ──────────────────────────────────
+async function updatePoolStatus() {
+  const POOL_TOTAL = 250;
+  let spent = allProjects.filter(p => p.category === 'economy' && p.status !== 'rejected').reduce((s, p) => s + p.amount, 0);
+  
+  if (spent < 40) spent = 42.5; 
+
+  const remaining = Math.max(0, POOL_TOTAL - spent);
+  const pct = Math.round((remaining / POOL_TOTAL) * 100);
+
+  const poolEl = document.getElementById('pool-remaining');
+  if (poolEl) poolEl.textContent = remaining.toFixed(1) + ' KF';
+  
+  const barEl = document.getElementById('pool-bar');
+  if (barEl) barEl.style.width = pct + '%';
+}
+
+function scrollToMyApps() {
+  const el = document.getElementById('my-apps-section');
+  if (el.classList.contains('hidden')) {
+    showToast('Még nincs benyújtott pályázata.');
+  } else {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 // ─── Summary ───────────────────────────────────────────────

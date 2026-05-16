@@ -4,7 +4,7 @@
 const DISCORD_CLIENT_ID = '1246462744870256731';
 const DISCORD_CLIENT_SECRET = 'cwudpxlbWiMXtlqH2K_4LMatgoLTB-qS';
 const REDIRECT_URI = 'https://craftlandia-ugyfelkapu.koalabalazsnemeth.workers.dev/api/auth/discord/callback';
-const FRONTEND_URL = 'https://craftlandia-ugyfelkapu.pages.dev/';
+const FRONTEND_URL = 'https://craftlandia-ugyfelkapu.pages.dev';
 const FRONTEND_ORIGIN = 'https://craftlandia-ugyfelkapu.pages.dev';
 const JWT_SECRET = 'k2M5tRqS8vW3uI1oE7aB6fZ9yX0dP4hG';
 
@@ -21,8 +21,8 @@ export default {
     try {
       // Public routes
       if (path === '/auth/discord/callback') return handleDiscordCallback(request, url, env);
-      if (path === '/stats' && method === 'GET') return handleStats(env);
-      if (path === '/eu-projects' && method === 'GET') return handleEuProjects(url, env);
+      if (path === '/stats' && method === 'GET') return handleStats(request, env);
+      if (path === '/eu-projects' && method === 'GET') return handleEuProjects(request, url, env);
 
       // Auth-protected routes
       const user = await verifyToken(request, env);
@@ -31,22 +31,25 @@ export default {
       if (path === '/ceg/alapit' && method === 'POST') return handleCegAlapit(request, user, env);
       if (path === '/ado/bevallas' && method === 'POST') return handleAdoBevallas(request, user, env);
       if (path === '/okmany/igenyel' && method === 'POST') return handleOkmanyIgenyel(request, user, env);
-      if (path === '/uzenetek' && method === 'GET') return handleUzenetek(user, env);
-      if (path === '/uzenetek/read-all' && method === 'POST') return handleUzenetReadAll(user, env);
-      if (path.startsWith('/uzenetek/') && method === 'POST') return handleUzenetRead(path, user, env);
-      if (path.startsWith('/uzenetek/') && method === 'DELETE') return handleUzenetDelete(path, user, env);
+      if (path === '/uzenetek' && method === 'GET') return handleUzenetek(request, user, env);
+      if (path === '/uzenetek/read-all' && method === 'POST') return handleUzenetReadAll(request, user, env);
+      if (path.startsWith('/uzenetek/') && method === 'POST') return handleUzenetRead(request, path, user, env);
+      if (path.startsWith('/uzenetek/') && method === 'DELETE') return handleUzenetDelete(request, path, user, env);
 
       if (path === '/lakcim/bejelent' && method === 'POST') return handleLakcimBejelent(request, user, env);
       if (path === '/panasz/benyujt' && method === 'POST') return handlePanaszBenyujt(request, user, env);
+      if (path === '/eu/apply' && method === 'POST') return handleEuApply(request, user, env);
+      if (path === '/eu/my-applications' && method === 'GET') return handleGetMyEuApplications(request, user, env);
+      if (path === '/my-companies' && method === 'GET') return handleGetMyCompanies(request, user, env);
 
       // Admin/PM routes
       if (path === '/admin/candidate' && method === 'POST') return handleAddCandidate(request, user, env);
       if (path === '/admin/inject-funds' && method === 'POST') return handleInjectFunds(request, user, env);
-      if (path === '/admin/users' && method === 'GET') return handleGetUsers(user, env);
+      if (path === '/admin/users' && method === 'GET') return handleGetUsers(request, user, env);
 
       return jsonResponse({ error: 'Not Found' }, 404, request);
     } catch (e) {
-      console.error(e);
+      console.error('Worker Error:', e);
       return jsonResponse({ error: 'Internal Server Error', detail: e.message }, 500, request);
     }
   }
@@ -149,7 +152,7 @@ async function hmacSHA256(message, secret) {
 }
 
 // ─── Stats (public) ────────────────────────────────────────
-async function handleStats(env) {
+async function handleStats(request, env) {
   const [cegs, users, funds, cases] = await Promise.all([
     env.DB.prepare('SELECT COUNT(*) as n FROM cegek').first(),
     env.DB.prepare('SELECT COUNT(*) as n FROM users').first(),
@@ -161,11 +164,11 @@ async function handleStats(env) {
     citizens: users?.n || 0,
     eu_funds: funds?.n || 0,
     cases_handled: cases?.n || 0,
-  });
+  }, 200, request);
 }
 
 // ─── EU Projects (public) ──────────────────────────────────
-async function handleEuProjects(url, env) {
+async function handleEuProjects(request, url, env) {
   const status = url.searchParams.get('status') || '';
   const category = url.searchParams.get('category') || '';
   let query = 'SELECT * FROM eu_projects WHERE 1=1';
@@ -174,7 +177,7 @@ async function handleEuProjects(url, env) {
   if (category) { query += ' AND category = ?'; bindings.push(category); }
   query += ' ORDER BY date DESC';
   const projects = await env.DB.prepare(query).bind(...bindings).all();
-  return jsonResponse({ projects: projects.results || [] });
+  return jsonResponse({ projects: projects.results || [] }, 200, request);
 }
 
 // ─── Cégalapítás ───────────────────────────────────────────
@@ -193,7 +196,7 @@ async function handleCegAlapit(request, user, env) {
     'ceg'
   );
 
-  return jsonResponse({ ugy_szam });
+  return jsonResponse({ ugy_szam }, 200, request);
 }
 
 // ─── Adóbevallás ───────────────────────────────────────────
@@ -214,7 +217,7 @@ async function handleAdoBevallas(request, user, env) {
     'ado'
   );
 
-  return jsonResponse({ hivatkozas });
+  return jsonResponse({ hivatkozas }, 200, request);
 }
 
 // ─── Okmányigénylés ────────────────────────────────────────
@@ -223,17 +226,19 @@ async function handleOkmanyIgenyel(request, user, env) {
   const ugy_szam = 'OKM-' + Date.now().toString(36).toUpperCase();
 
   await env.DB.prepare(`
-    INSERT INTO okmany_igenylasek (ugy_szam, discord_id, tipus, nev, status, created_at)
-    VALUES (?, ?, ?, ?, 'pending', datetime('now'))
-  `).bind(ugy_szam, user.sub, body.tipus, body.nev).run();
+    INSERT INTO okmany_igenylasek (ugy_szam, discord_id, tipus, nev, szuldat, anyja_neve, szulhely, kezbesites, postacim, dij, status, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', datetime('now'))
+  `).bind(ugy_szam, user.sub, body.tipus, body.nev, body.szuldat, body.anyja_neve, body.szulhely, body.kezbesites, body.postacim, body.dij).run();
+
+  await env.DB.prepare(`INSERT INTO ugyiratok (discord_id, tipus, hivatkozas, created_at) VALUES (?, 'okmany', ?, datetime('now'))`).bind(user.sub, ugy_szam).run();
 
   await insertUzenet(env, user.sub, 'Craftlandia Okmányiroda',
     `Okmányigénylés befogadva – ${ugy_szam}`,
-    `Tisztelt Kérelmező!\n\nAz okmányigénylési kérelmét (${ugy_szam}) befogadtuk. Az elkészítés és kézbesítés várható ideje: 10–30 munkanap.\n\nCraftlandia Okmányiroda`,
+    `Tisztelt ${body.nev}!\n\n${body.tipus} típusú okmányigénylését (${ugy_szam}) rögzítettük. Az okmány elkészüléséről újabb üzenetben értesítjük.\n\nCraftlandia Belügyminisztérium`,
     'ertesites'
   );
 
-  return jsonResponse({ ugy_szam });
+  return jsonResponse({ ugy_szam }, 200, request);
 }
 
 // ─── Lakcímbejelentés ──────────────────────────────────────
@@ -248,13 +253,13 @@ async function handleLakcimBejelent(request, user, env) {
 
   await env.DB.prepare(`INSERT INTO ugyiratok (discord_id, tipus, hivatkozas, created_at) VALUES (?, 'lakcim', ?, datetime('now'))`).bind(user.sub, ugy_szam).run();
 
-  await insertUzenet(env, user.sub, 'Belügyminisztérium',
-    `Lakcímbejelentés visszaigazolás – ${ugy_szam}`,
-    `Tisztelt ${body.nev}!\n\nLakcímbejelentési kérelmét (${ugy_szam}) rögzítettük. Az adatok ellenőrzése folyamatban van. Amennyiben minden adat helyes, az új lakcímkártyát 15 munkanapon belül postázzuk.\n\nBelügyminisztérium Nyilvántartó Hivatal`,
+  await insertUzenet(env, user.sub, 'Bazsi City Lakcímnyilvántartó',
+    `Lakcímbejelentés rögzítve – ${ugy_szam}`,
+    `Tisztelt ${body.nev}!\n\nLakcímbejelentési kérelmét (${ugy_szam}) befogadtuk. Az adatok ellenőrzése után postázzuk az új lakcímkártyát.\n\nKözponti Lakcímnyilvántartó`,
     'ertesites'
   );
 
-  return jsonResponse({ ugy_szam });
+  return jsonResponse({ ugy_szam }, 200, request);
 }
 
 // ─── Panasz benyújtás ──────────────────────────────────────
@@ -265,42 +270,42 @@ async function handlePanaszBenyujt(request, user, env) {
   await env.DB.prepare(`
     INSERT INTO panaszok (ugy_szam, discord_id, panasz_tipus, szerv_neve, leiras, status, created_at)
     VALUES (?, ?, ?, ?, ?, 'pending', datetime('now'))
-  `).bind(ugy_szam, user.sub, body.tipus, body.hivatal, body.leiras).run();
+  `).bind(ugy_szam, user.sub, body.panasz_tipus, body.szerv_neve, body.leiras).run();
 
   await env.DB.prepare(`INSERT INTO ugyiratok (discord_id, tipus, hivatkozas, created_at) VALUES (?, 'panasz', ?, datetime('now'))`).bind(user.sub, ugy_szam).run();
 
-  await insertUzenet(env, user.sub, 'Állami Számvevőszék',
-    `Panaszbefogadás – ${ugy_szam}`,
-    `Tisztelt Bejelentő!\n\nA(z) ${body.hivatal} elleni panaszát (${ugy_szam}) befogadtuk. Az ügy kivizsgálása megkezdődött. Várható válaszadási határidő: 30 nap.\n\nÁllami Számvevőszék Jogorvoslati Főosztály`,
+  await insertUzenet(env, user.sub, 'Craftlandia Jogorvoslati Hivatal',
+    `Panaszbejelentés érkezett – ${ugy_szam}`,
+    `Tisztelt Polgár!\n\nAz Ön által benyújtott panaszt (${ugy_szam}) rögzítettük. Az ügy kivizsgálása megkezdődött.\n\nCraftlandia Ombudsman Hivatala`,
     'hatarozat'
   );
 
-  return jsonResponse({ ugy_szam });
+  return jsonResponse({ ugy_szam }, 200, request);
 }
 
 // ─── Üzenetek ──────────────────────────────────────────────
-async function handleUzenetek(user, env) {
+async function handleUzenetek(request, user, env) {
   const msgs = await env.DB.prepare(`
     SELECT * FROM uzenetek WHERE discord_id = ? ORDER BY created_at DESC LIMIT 50
   `).bind(user.sub).all();
-  return jsonResponse({ messages: msgs.results || [] });
+  return jsonResponse({ messages: msgs.results || [] }, 200, request);
 }
 
-async function handleUzenetReadAll(user, env) {
+async function handleUzenetReadAll(request, user, env) {
   await env.DB.prepare(`UPDATE uzenetek SET read = 1 WHERE discord_id = ?`).bind(user.sub).run();
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true }, 200, request);
 }
 
-async function handleUzenetRead(path, user, env) {
+async function handleUzenetRead(request, path, user, env) {
   const id = path.split('/')[2];
   await env.DB.prepare(`UPDATE uzenetek SET read = 1 WHERE id = ? AND discord_id = ?`).bind(id, user.sub).run();
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true }, 200, request);
 }
 
-async function handleUzenetDelete(path, user, env) {
+async function handleUzenetDelete(request, path, user, env) {
   const id = path.split('/')[2];
   await env.DB.prepare(`DELETE FROM uzenetek WHERE id = ? AND discord_id = ?`).bind(id, user.sub).run();
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true }, 200, request);
 }
 
 // ─── Helper: insert message ────────────────────────────────
@@ -313,7 +318,7 @@ async function insertUzenet(env, discord_id, from_name, subject, body, category)
 
 // ─── Admin Handlers ────────────────────────────────────────
 async function handleAddCandidate(request, user, env) {
-  if (user.role !== 'pm' && user.role !== 'admin') return jsonResponse({ error: 'Forbidden' }, 403);
+  if (user.role !== 'pm' && user.role !== 'admin') return jsonResponse({ error: 'Forbidden' }, 403, request);
   const body = await request.json();
   
   await env.DB.prepare(`
@@ -321,11 +326,11 @@ async function handleAddCandidate(request, user, env) {
     VALUES (?, ?, ?, ?, ?, datetime('now'))
   `).bind(body.discord_id, body.name, body.party || '', body.slogan || '', body.statement || '').run();
 
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true }, 200, request);
 }
 
 async function handleInjectFunds(request, user, env) {
-  if (user.role !== 'pm' && user.role !== 'admin') return jsonResponse({ error: 'Forbidden' }, 403);
+  if (user.role !== 'pm' && user.role !== 'admin') return jsonResponse({ error: 'Forbidden' }, 403, request);
   const body = await request.json();
   
   // Update EU funds statistics (mocked as inserting a project or updating a global pool)
@@ -343,28 +348,87 @@ async function handleInjectFunds(request, user, env) {
     VALUES (?, ?, 'Országos', 'economy', ?, ?, 'paid', 100, ?, date('now'))
   `).bind(project_id, `Forrásinjekció: ${body.source}`, body.amount, body.amount, body.reason || 'Kincstári forrásbővítés').run();
 
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true }, 200, request);
 }
 
-async function handleGetUsers(user, env) {
-  if (user.role !== 'pm' && user.role !== 'admin') return jsonResponse({ error: 'Forbidden' }, 403);
+async function handleGetUsers(request, user, env) {
+  if (user.role !== 'pm' && user.role !== 'admin') return jsonResponse({ error: 'Forbidden' }, 403, request);
   const users = await env.DB.prepare('SELECT discord_id, username, global_name, role, polgarsag FROM users LIMIT 100').all();
-  return jsonResponse({ users: users.results || [] });
+  return jsonResponse({ users: users.results || [] }, 200, request);
+}
+
+async function handleGetMyCompanies(request, user, env) {
+  const cegek = await env.DB.prepare('SELECT * FROM cegek WHERE discord_id = ? AND status = "approved"').bind(user.sub).all();
+  return jsonResponse({ companies: cegek.results || [] }, 200, request);
+}
+
+// ─── EU Pályázatok (Támogatások) ───────────────────────────
+async function handleEuApply(request, user, env) {
+  const body = await request.json();
+  const ugy_szam = 'TAM-' + Date.now().toString(36).toUpperCase();
+
+  // Ellenőrizzük, hogy a kiválasztott cég az övé-e és jóvá van-e hagyva
+  const ceg = await env.DB.prepare('SELECT id, ceg_nev FROM cegek WHERE id = ? AND discord_id = ? AND status = "approved" LIMIT 1')
+    .bind(body.ceg_id, user.sub)
+    .first();
+    
+  if (!ceg) {
+    return jsonResponse({ error: 'Érvénytelen vagy nem jóváhagyott vállalkozás.' }, 403, request);
+  }
+
+  await env.DB.prepare(`
+    INSERT INTO eu_applications (ugy_szam, discord_id, ceg_id, project_name, amount, description, status, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, 'pending', datetime('now'))
+  `).bind(ugy_szam, user.sub, ceg.id, body.project_name, body.amount, body.description).run();
+
+  await env.DB.prepare(`INSERT INTO ugyiratok (discord_id, tipus, hivatkozas, created_at) VALUES (?, 'tamogatas', ?, datetime('now'))`).bind(user.sub, ugy_szam).run();
+
+  await insertUzenet(env, user.sub, 'Craftlandia Kormány',
+    `Támogatási pályázat befogadva – ${ugy_szam}`,
+    `Tisztelt ${ceg.ceg_nev}!\n\nA(z) "${body.project_name}" elnevezésű EU-s támogatási pályázatát (${ugy_szam}) rendszerünk rögzítette. Az elbírálás folyamatban.\n\nKormányzati Pályázati Iroda`,
+    'ertesites'
+  );
+
+  return jsonResponse({ ugy_szam }, 200, request);
+}
+
+async function handleGetMyEuApplications(request, user, env) {
+  const apps = await env.DB.prepare(`
+    SELECT a.*, c.ceg_nev 
+    FROM eu_applications a
+    JOIN cegek c ON a.ceg_id = c.id
+    WHERE a.discord_id = ?
+    ORDER BY a.created_at DESC
+  `).bind(user.sub).all();
+  return jsonResponse({ applications: apps.results || [] }, 200, request);
 }
 
 // ─── Response helpers ──────────────────────────────────────
 function getCorsHeaders(request) {
   const origin = request ? request.headers.get('Origin') : null;
-  const allowed = (origin && (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('craftlandia.gov')));
+  const requestHeaders = request ? request.headers.get('Access-Control-Request-Headers') : null;
   
+  // Define allowed patterns
+  const isAllowed = !origin || 
+                    origin.includes('localhost') || 
+                    origin.includes('127.0.0.1') || 
+                    origin.includes('pages.dev') ||
+                    origin.includes('craftlandia.gov');
+
+  // For CORS with credentials, we MUST return the specific origin, not '*'
+  const allowedOrigin = isAllowed && origin ? origin : FRONTEND_ORIGIN;
+
   return {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': allowed ? origin : FRONTEND_ORIGIN,
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': requestHeaders || 'Content-Type, Authorization, X-Requested-With, Accept',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Max-Age': '86400',
+    'Vary': 'Origin'
   };
 }
+
 function jsonResponse(data, status = 200, request = null) {
   return new Response(JSON.stringify(data), {
     status,

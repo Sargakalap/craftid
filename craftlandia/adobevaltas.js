@@ -83,6 +83,52 @@ function showSuccess(ref) {
   document.getElementById('bev-ref').textContent = ref;
 }
 
+const MOCK_FOUNDATIONS = [
+  { name: 'Craftlandiai Macskamentők Alapítvány', tax_id: '18273645-1-42' },
+  { name: 'InternetÉRT Alapítvány', tax_id: '12105943-2-12' },
+  { name: 'Digitális Jövőért Egyesület', tax_id: '11223344-1-01' },
+  { name: 'Zöld Világ Alapítvány', tax_id: '99887766-2-05' },
+  { name: 'Craftlandia Kultúrájáért Alapítvány', tax_id: '55667788-1-11' },
+  { name: 'Segítő Kéz Alapítvány', tax_id: '33445566-1-20' }
+];
+
+function searchFoundation(query) {
+  const resultsDiv = document.getElementById('foundation-results');
+  if (!query || query.length < 2) {
+    resultsDiv.classList.add('hidden');
+    return;
+  }
+
+  const filtered = MOCK_FOUNDATIONS.filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
+  
+  if (filtered.length > 0) {
+    resultsDiv.innerHTML = filtered.map(f => `
+      <div onclick="selectFoundation('${f.name}', '${f.tax_id}')" class="p-3 hover:bg-blue-50 cursor-pointer border-b border-[#1a1a18]/05 last:border-0">
+        <div class="font-medium text-sm">${f.name}</div>
+        <div class="font-mono text-[10px] text-[#1a1a18]/40">${f.tax_id}</div>
+      </div>
+    `).join('');
+    resultsDiv.classList.remove('hidden');
+  } else {
+    resultsDiv.innerHTML = '<div class="p-4 text-xs text-[#1a1a18]/40 text-center font-mono italic">Nincs találat.</div>';
+    resultsDiv.classList.remove('hidden');
+  }
+}
+
+function selectFoundation(name, taxId) {
+  document.getElementById('ado1-nev').value = name;
+  document.getElementById('ado1-adoszam').value = taxId;
+  document.getElementById('foundation-search').value = name;
+  document.getElementById('foundation-results').classList.add('hidden');
+}
+
+// Close results on click outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#foundation-search')) {
+    document.getElementById('foundation-results')?.classList.add('hidden');
+  }
+});
+
 async function saveDraft() {
   showToast('Piszkozat elmentve.');
 }
