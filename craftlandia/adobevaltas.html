@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adóbevallás – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+<header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-4 hover:opacity-70 transition-opacity">
+      <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center"><span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span></div>
+      <div>
+        <div class="font-garamond text-lg font-semibold">Craftlandia Ügyfélkapu</div>
+        <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Adóbevallás</div>
+      </div>
+    </a>
+    <div id="auth-section">
+      <button id="login-btn" onclick="handleDiscordLogin()" class="flex items-center gap-2 bg-[#5865F2] text-white px-4 py-2 text-sm font-medium hover:bg-[#4752C4] transition-colors">Bejelentkezés</button>
+      <div id="user-info" class="hidden items-center gap-3">
+        <img id="user-avatar" class="w-8 h-8 rounded-full border border-[#1a1a18]/20" src="" alt="">
+        <div id="user-name" class="text-sm font-medium"></div>
+        <button onclick="handleLogout()" class="text-xs text-[#1a1a18]/40 hover:text-[#1a1a18] ml-2">Kilépés</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 py-12">
+  <nav class="flex items-center gap-2 font-mono text-xs text-[#1a1a18]/40 mb-8">
+    <a href="index.html" class="hover:text-[#1a1a18]">Főoldal</a><span>/</span><span class="text-[#1a1a18]">Adóbevallás</span>
+  </nav>
+
+  <div class="page-header">
+    <h1 class="font-garamond text-4xl font-medium mb-2">Adóbevallás benyújtása</h1>
+    <p class="text-[#1a1a18]/55 leading-relaxed">A Kraft-alapú adórendszer keretein belül nyújtsa be éves vagy negyedéves bevallását. Az adatok titkosítva kerülnek a Craftlandia Adóhivatalhoz.</p>
+  </div>
+
+  <!-- Bevallási időszak selector -->
+  <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label>Bevallás típusa *</label>
+        <select id="bev-tipus" onchange="updateBevallasTipus()">
+          <option value="eves">Éves bevallás (ÉV)</option>
+          <option value="negyed">Negyedéves bevallás (NÉV)</option>
+          <option value="ho">Havi előleg (HÉ)</option>
+        </select>
+      </div>
+      <div>
+        <label>Adóév *</label>
+        <select id="adoev">
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+        </select>
+      </div>
+      <div id="negyed-wrap" class="hidden">
+        <label>Negyedév</label>
+        <select id="negyedik">
+          <option value="1">I. negyedév (jan–már)</option>
+          <option value="2">II. negyedév (ápr–jún)</option>
+          <option value="3">III. negyedév (júl–szep)</option>
+          <option value="4">IV. negyedév (okt–dec)</option>
+        </select>
+      </div>
+      <div id="ho-wrap" class="hidden">
+        <label>Hónap</label>
+        <select id="honap">
+          <option value="1">Január</option><option value="2">Február</option><option value="3">Március</option>
+          <option value="4">Április</option><option value="5">Május</option><option value="6">Június</option>
+          <option value="7">Július</option><option value="8">Augusztus</option><option value="9">Szeptember</option>
+          <option value="10">Október</option><option value="11">November</option><option value="12">December</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Adózó azonosítása -->
+  <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
+    <h2 class="font-garamond text-xl font-medium mb-5">Az adózó adatai</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label>Adóazonosító / Adószám *</label>
+        <input type="text" id="adoszam" placeholder="pl. KF-2025-00142" />
+      </div>
+      <div>
+        <label>Vállalkozás / Magánszemély neve *</label>
+        <input type="text" id="adozo-nev" placeholder="Teljes név vagy cégnév" />
+      </div>
+      <div>
+        <label>Állandó lakcím / Székhely</label>
+        <input type="text" id="adozo-cim" placeholder="Utca, házszám, irányítószám" />
+      </div>
+      <div>
+        <label>Önkormányzat (illetékes)</label>
+        <select id="adozo-telepules">
+          <option value="">Válasszon...</option>
+          <option value="bazsi_city">Bazsi City (főváros)</option>
+          <option value="vasfalu">Vasfalu</option>
+          <option value="palotas">Palotás</option>
+          <option value="rozsaváros">Rózsaváros</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jövedelem adatok -->
+  <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
+    <h2 class="font-garamond text-xl font-medium mb-5">Jövedelem és adóalap</h2>
+    <div class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Összes bevétel (KF) *</label>
+          <input type="number" id="bevetel" min="0" step="1" placeholder="0" oninput="kalkulal()" />
+        </div>
+        <div>
+          <label>Elismert költségek (KF)</label>
+          <input type="number" id="koltseg" min="0" step="1" placeholder="0" oninput="kalkulal()" />
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Egyéb levonások (KF)</label>
+          <input type="number" id="levon" min="0" step="1" placeholder="0" oninput="kalkulal()" />
+        </div>
+        <div>
+          <label>Adókedvezmény (KF)</label>
+          <input type="number" id="kedv" min="0" step="1" placeholder="0" oninput="kalkulal()" />
+        </div>
+      </div>
+
+      <!-- Kalkulátor -->
+      <div class="border border-[#1a1a18]/10 bg-[#F5F3EE] p-5 mt-2">
+        <div class="font-mono text-xs text-[#1a1a18]/40 uppercase tracking-wide mb-4">Automatikus számítás</div>
+        <div class="space-y-2">
+          <div class="flex justify-between text-sm">
+            <span class="text-[#1a1a18]/60">Adóalap</span>
+            <span class="font-mono font-medium" id="calc-adoalap">0 KF</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-[#1a1a18]/60">Adókulcs</span>
+            <span class="font-mono font-medium" id="calc-kulcs">15%</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-[#1a1a18]/60">Számított adó</span>
+            <span class="font-mono font-medium" id="calc-szamitott">0 KF</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-[#1a1a18]/60">Kedvezmény</span>
+            <span class="font-mono font-medium text-green-700" id="calc-kedv">− 0 KF</span>
+          </div>
+          <div class="border-t border-[#1a1a18]/10 pt-2 flex justify-between">
+            <span class="font-medium">Fizetendő adó</span>
+            <span class="font-garamond text-xl font-medium text-[#1a1a18]" id="calc-fizetendo">0 KF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Megjegyzés -->
+  <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
+    <h2 class="font-garamond text-xl font-medium mb-4">Megjegyzés, csatolmány</h2>
+    <div class="space-y-4">
+      <div>
+        <label>Megjegyzés az adóhatóságnak</label>
+        <textarea id="ado-megjegyzes" rows="3" placeholder="Opcionális magyarázat, különleges körülmény..."></textarea>
+      </div>
+      <div>
+        <label>Dokumentum feltöltése</label>
+        <div class="border-2 border-dashed border-[#1a1a18]/15 p-6 text-center hover:border-[#1a1a18]/30 transition-colors cursor-pointer" onclick="document.getElementById('file-input').click()">
+          <svg class="w-8 h-8 text-[#1a1a18]/20 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          <p class="text-sm text-[#1a1a18]/40">Kattintson a feltöltéshez vagy húzza ide a fájlt</p>
+          <p class="font-mono text-xs text-[#1a1a18]/30 mt-1">PDF, PNG, JPG – max. 10 MB</p>
+          <input type="file" id="file-input" class="hidden" accept=".pdf,.png,.jpg,.jpeg" onchange="showFile(this)" />
+        </div>
+        <div id="file-name" class="hidden font-mono text-xs text-[#1a1a18]/50 mt-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Adó 1% Felajánlás -->
+  <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="font-garamond text-xl font-medium text-blue-900">Adó 1% Felajánlás (Opcionális)</h2>
+      <span class="badge bg-blue-50 text-blue-800 border border-blue-100">Közhasznú</span>
+    </div>
+    <p class="text-sm text-[#1a1a18]/50 mb-5 leading-relaxed">Rendelkezzen adója 1%-áról egy választott Craftlandiai civil szervezet javára.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label>Kedvezményezett szervezet adószáma</label>
+        <input type="text" id="ado1-adoszam" placeholder="pl. 12345678-1-12" class="font-mono" />
+      </div>
+      <div>
+        <label>Szervezet neve</label>
+        <input type="text" id="ado1-nev" placeholder="pl. Craftlandiai Macskamentők Alapítvány" />
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Nyilatkozat + benyújtás -->
+  <div class="bg-white border border-[#1a1a18]/10 p-6 mb-6">
+    <label class="flex items-start gap-3 cursor-pointer mb-5">
+      <input type="checkbox" id="ado-nyilatkozat" class="mt-0.5 w-4 h-4 flex-shrink-0" />
+      <span class="text-sm text-[#1a1a18]/60 leading-relaxed">Kijelentem, hogy a bevallásban szereplő adatok a legjobb tudomásom szerint helytállóak, és tudomásul veszem, hogy valótlan adatszolgáltatás az Alaptörvény szerint jogkövetkezménnyel jár.</span>
+    </label>
+    <div class="flex items-center gap-4">
+      <button onclick="submitBevallas()" id="bev-submit" class="btn-primary px-8 py-3">Bevallás benyújtása</button>
+      <button onclick="saveDraft()" class="btn-secondary px-6 py-3 text-sm">Piszkozat mentése</button>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div id="bev-success" class="hidden bg-white border border-[#1a1a18]/10 p-10 text-center">
+    <div class="w-14 h-14 bg-green-50 border border-green-200 flex items-center justify-center mx-auto mb-5">
+      <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h2 class="font-garamond text-3xl font-medium mb-2">Bevallás sikeresen benyújtva!</h2>
+    <p class="text-sm text-[#1a1a18]/50 mb-2">Hivatkozási szám: <span id="bev-ref" class="font-mono font-medium text-[#1a1a18]">—</span></p>
+    <p class="text-sm text-[#1a1a18]/45 mb-8 max-w-md mx-auto leading-relaxed">A bevallást a Craftlandia Adóhivatal feldolgozza. A fizetési felhívást üzenetben küldjük el.</p>
+    <a href="index.html" class="btn-primary px-8 py-3">Főoldalra</a>
+  </div>
+
+</main>
+
+<script src="auth.js"></script>
+<script src="adobevaltas.js"></script>
+</body>
+</html>

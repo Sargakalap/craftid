@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cégalapítás – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+<header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+    <a href="index.html" class="flex items-center gap-4 hover:opacity-70 transition-opacity">
+      <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center">
+        <span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span>
+      </div>
+      <div>
+        <div class="font-garamond text-lg font-semibold leading-tight">Craftlandia Ügyfélkapu</div>
+        <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Szervezetalapítás</div>
+      </div>
+    </a>
+    </div>
+    <div id="auth-section">
+      <button id="login-btn" onclick="handleDiscordLogin()" class="flex items-center gap-2 bg-[#5865F2] text-white px-4 py-2 text-sm font-medium hover:bg-[#4752C4] transition-colors">Bejelentkezés</button>
+      <div id="user-info" class="hidden items-center gap-3">
+        <img id="user-avatar" class="w-8 h-8 rounded-full border border-[#1a1a18]/20" src="" alt="">
+        <div id="user-name" class="text-sm font-medium"></div>
+        <button onclick="handleLogout()" class="text-xs text-[#1a1a18]/40 hover:text-[#1a1a18] transition-colors ml-2">Kilépés</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 py-12">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 font-mono text-xs text-[#1a1a18]/40 mb-8">
+    <a href="index.html" class="hover:text-[#1a1a18] transition-colors">Főoldal</a>
+    <span>/</span>
+    <span class="text-[#1a1a18]">Szervezetalapítás</span>
+  </nav>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <h1 class="font-garamond text-4xl font-medium mb-2">Szervezet bejegyzése</h1>
+    <p class="text-[#1a1a18]/55 leading-relaxed">Alapítson céget, alapítványt vagy pártot Craftlandiában az Alaptörvény szerinti helyi önkormányzati kereteken belül.</p>
+  </div>
+
+  <!-- Auth gate -->
+  <div id="auth-gate" class="hidden mb-8 border border-[#1a1a18]/20 bg-white p-6 text-center">
+    <p class="text-sm text-[#1a1a18]/60 mb-4">A cégalapítási kérelem benyújtásához bejelentkezés szükséges.</p>
+    <button onclick="handleDiscordLogin()" class="bg-[#5865F2] text-white px-6 py-2.5 text-sm font-medium hover:bg-[#4752C4] transition-colors">Bejelentkezés Discorddal</button>
+  </div>
+
+  <div id="form-container">
+    <!-- Step indicator -->
+    <div class="flex items-center gap-0 mb-10">
+      <div class="step-dot active" id="step-1-dot">1</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="step-2-dot">2</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="step-3-dot">3</div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step-dot" id="step-4-dot">4</div>
+    </div>
+    <div class="flex mb-10 font-mono text-xs text-[#1a1a18]/40">
+      <div class="flex-1 text-center" style="margin-left:-14px">Alap adatok</div>
+      <div class="flex-1 text-center">Társasági forma</div>
+      <div class="flex-1 text-center">Székhely</div>
+      <div class="flex-1 text-center">Összefoglalás</div>
+    </div>
+
+    <!-- Step 1: Alapadatok -->
+    <div id="step-1" class="step-panel">
+      <div class="bg-white border border-[#1a1a18]/10 p-8">
+        <h2 class="font-garamond text-2xl font-medium mb-6">Vállalkozás alapadatai</h2>
+        <div class="space-y-5">
+          <div>
+            <label>Vállalkozás neve *</label>
+            <input type="text" id="ceg-nev" placeholder="pl. Craftlandia Tech Kft." />
+            <p class="text-xs text-[#1a1a18]/40 mt-1 font-mono">A névnek egyedinek kell lennie a cégjegyzékben.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label>Alapító neve *</label>
+              <input type="text" id="alapito-nev" placeholder="Teljes név" />
+            </div>
+            <div>
+              <label>Alapító Discord ID</label>
+              <input type="text" id="alapito-discord" placeholder="Automatikus" disabled class="bg-[#1a1a18]/05 text-[#1a1a18]/40" />
+            </div>
+          </div>
+          <div>
+            <label>Tevékenységi kör (TEÁOR) *</label>
+            <select id="tearor">
+              <option value="">Válasszon tevékenységi kört...</option>
+              <option value="6201">6201 – Számítógépes programozás</option>
+              <option value="6209">6209 – Egyéb információ-technológiai szolgáltatás</option>
+              <option value="4719">4719 – Vegyes profilú kiskereskedelem</option>
+              <option value="5610">5610 – Éttermi, mozgó vendéglátás</option>
+              <option value="4110">4110 – Ingatlanfejlesztés</option>
+              <option value="7111">7111 – Építészmérnöki tevékenység</option>
+              <option value="8520">8520 – Alapfokú oktatás</option>
+              <option value="8610">8610 – Fekvőbeteg-ellátás</option>
+              <option value="0111">0111 – Gabonafélék termesztése</option>
+              <option value="egyeb">Egyéb (szöveges megadás)</option>
+            </select>
+          </div>
+          <div id="tearor-egyeb-wrap" class="hidden">
+            <label>Tevékenység leírása *</label>
+            <textarea id="tearor-egyeb" rows="2" placeholder="Írja le röviden a vállalkozás fő tevékenységét..."></textarea>
+          </div>
+          <div>
+            <label>Alaptőke (KF) *</label>
+            <input type="number" id="alaptoke" placeholder="0" min="0" step="100" />
+            <p class="text-xs text-[#1a1a18]/40 mt-1 font-mono">Minimális alaptőke Kft. esetén: 64 KF</p>
+            <p class="text-xs text-[#1a1a18]/40 mt-1 font-mono">Minimális alaptőke Bt. esetén: 1 KF</p>
+            <p class="text-xs text-[#1a1a18]/40 mt-1 font-mono">Minimális alaptőke Rt. esetén: 100 KF</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button onclick="nextStep(2)" class="btn-primary px-8 py-3">Következő →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Jogi forma -->
+    <div id="step-2" class="step-panel hidden">
+      <div class="bg-white border border-[#1a1a18]/10 p-8">
+        <h2 class="font-garamond text-2xl font-medium mb-6">Jogi forma választása</h2>
+        <div class="space-y-3" id="forma-selector">
+          <div class="forma-option border border-[#1a1a18]/15 p-5 cursor-pointer hover:border-[#1a1a18]/40 transition-all" onclick="selectForma(this, 'bt')" data-value="bt">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium mb-1">Betéti Társaság (Bt.)</div>
+                <div class="text-sm text-[#1a1a18]/50 leading-relaxed">Bel- és kültagokból álló, egyszerűbb személyegyesítő forma. Nincs minimális tőkekövetelmény. Ideális kisebb, személyes vállalkozásokhoz.</div>
+              </div>
+              <div class="forma-check w-5 h-5 border border-[#1a1a18]/20 flex-shrink-0 ml-4 mt-0.5 flex items-center justify-center"></div>
+            </div>
+            <div class="flex gap-4 mt-3 font-mono text-xs text-[#1a1a18]/40">
+              <span>Min. tőke: 0 KF</span>
+              <span>·</span>
+              <span>Tagok: 2+</span>
+              <span>·</span>
+              <span>Korlátlan felelősség (beltag)</span>
+            </div>
+          </div>
+          <div class="forma-option border border-[#1a1a18]/15 p-5 cursor-pointer hover:border-[#1a1a18]/40 transition-all" onclick="selectForma(this, 'kft')" data-value="kft">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium mb-1">Korlátolt Felelősségű Társaság (Kft.)</div>
+                <div class="text-sm text-[#1a1a18]/50 leading-relaxed">A leggyakoribb vállalkozási forma. A tagok felelőssége a vagyoni hozzájárulásra korlátozott. Rugalmas struktúra.</div>
+              </div>
+              <div class="forma-check w-5 h-5 border border-[#1a1a18]/20 flex-shrink-0 ml-4 mt-0.5 flex items-center justify-center"></div>
+            </div>
+            <div class="flex gap-4 mt-3 font-mono text-xs text-[#1a1a18]/40">
+              <span>Min. tőke: 64 KF</span>
+              <span>·</span>
+              <span>Tagok: 1+</span>
+              <span>·</span>
+              <span>Korlátolt felelősség</span>
+            </div>
+          </div>
+          <div class="forma-option border border-[#1a1a18]/15 p-5 cursor-pointer hover:border-[#1a1a18]/40 transition-all" onclick="selectForma(this, 'rt')" data-value="rt">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium mb-1">Részvénytársaság (Rt.)</div>
+                <div class="text-sm text-[#1a1a18]/50 leading-relaxed">Tőkeegyesítő társaság részvényesekkel. Nyílt vagy zárt körben működhet. Nagyobb vállalkozásoknak ajánlott.</div>
+              </div>
+              <div class="forma-check w-5 h-5 border border-[#1a1a18]/20 flex-shrink-0 ml-4 mt-0.5 flex items-center justify-center"></div>
+            </div>
+            <div class="flex gap-4 mt-3 font-mono text-xs text-[#1a1a18]/40">
+              <span>Min. tőke: 100 KF</span>
+              <span>·</span>
+              <span>Részvényesek: 1+</span>
+              <span>·</span>
+              <span>Korlátolt felelősség</span>
+            </div>
+          </div>
+          <div class="forma-option border border-[#1a1a18]/15 p-5 cursor-pointer hover:border-[#1a1a18]/40 transition-all" onclick="selectForma(this, 'ev')" data-value="ev">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium mb-1">Egyéni Vállalkozás (Ev.)</div>
+                <div class="text-sm text-[#1a1a18]/50 leading-relaxed">A legegyszerűbb forma egyéni vállalkozók számára. Egy személy alapítja és vezeti. Korlátlan személyes felelősség.</div>
+              </div>
+              <div class="forma-check w-5 h-5 border border-[#1a1a18]/20 flex-shrink-0 ml-4 mt-0.5 flex items-center justify-center"></div>
+            </div>
+            <div class="flex gap-4 mt-3 font-mono text-xs text-[#1a1a18]/40">
+              <span>Min. tőke: 0 KF</span>
+              <span>·</span>
+              <span>Tagok: 1</span>
+              <span>·</span>
+              <span>Korlátlan felelősség</span>
+            </div>
+          </div>
+          
+          <div class="forma-option border border-[#1a1a18]/15 p-5 cursor-pointer hover:border-[#1a1a18]/40 transition-all" onclick="selectForma(this, 'alapitvany')" data-value="alapitvany">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium mb-1 text-blue-800">Alapítvány / Civil szervezet</div>
+                <div class="text-sm text-[#1a1a18]/50 leading-relaxed">Közhasznú vagy magáncélú alapítvány. Adó 1% gyűjtésére jogosult nonprofit forma.</div>
+              </div>
+              <div class="forma-check w-5 h-5 border border-[#1a1a18]/20 flex-shrink-0 ml-4 mt-0.5 flex items-center justify-center"></div>
+            </div>
+            <div class="flex gap-4 mt-3 font-mono text-xs text-[#1a1a18]/40">
+              <span>Min. tőke: 10 KF</span>
+              <span>·</span>
+              <span>Tagok: 1+</span>
+              <span>·</span>
+              <span>Nonprofit társaság</span>
+            </div>
+          </div>
+          
+          <div class="forma-option border border-[#1a1a18]/15 p-5 cursor-pointer hover:border-[#1a1a18]/40 transition-all" onclick="selectForma(this, 'part')" data-value="part">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium mb-1 text-purple-800">Politikai Párt</div>
+                <div class="text-sm text-[#1a1a18]/50 leading-relaxed">Hivatalos politikai regisztráció választásokon való induláshoz.</div>
+              </div>
+              <div class="forma-check w-5 h-5 border border-[#1a1a18]/20 flex-shrink-0 ml-4 mt-0.5 flex items-center justify-center"></div>
+            </div>
+            <div class="flex gap-4 mt-3 font-mono text-xs text-[#1a1a18]/40">
+              <span>Min. tőke: 0.10 KF</span>
+              <span>·</span>
+              <span>Tagok: 10+</span>
+              <span>·</span>
+              <span>Politikai szervezet</span>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="tarsasagi-forma" />
+      </div>
+      <div class="flex justify-between mt-4">
+        <button onclick="prevStep(1)" class="btn-secondary px-8 py-3">← Vissza</button>
+        <button onclick="nextStep(3)" class="btn-primary px-8 py-3">Következő →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Székhely -->
+    <div id="step-3" class="step-panel hidden">
+      <div class="bg-white border border-[#1a1a18]/10 p-8">
+        <h2 class="font-garamond text-2xl font-medium mb-6">Székhely adatai</h2>
+        <div class="space-y-5">
+          <div>
+            <label>Önkormányzat / Település *</label>
+            <select id="telepules">
+              <option value="">Válasszon települést...</option>
+              <option value="bazsi_city">Bazsi City (főváros)</option>
+              <option value="vasfalu">Vasfalu</option>
+              <option value="palotas">Palotás</option>
+              <option value="rozsaváros">Rózsaváros</option>
+            </select>
+          </div>
+          <div>
+            <label>Utca, házszám *</label>
+            <input type="text" id="utca" placeholder="pl. Alkotmány utca 14." />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label>Irányítószám *</label>
+              <input type="text" id="irsz" placeholder="pl. 1000" />
+            </div>
+            <div>
+              <label>Emelet, ajtó</label>
+              <input type="text" id="emelet" placeholder="pl. 2/4" />
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <strong>Fontos:</strong> A székhely szerinti önkormányzat illetékes a helyi adók és a helyi vállalkozási engedélyek tekintetében. Az önkormányzat értesítést kap a bejegyzési kérelemről.
+          </div>
+          <div>
+            <label>Megjegyzés az önkormányzatnak</label>
+            <textarea id="megjegyzes" rows="3" placeholder="Opcionális megjegyzés a székhely szerinti önkormányzatnak..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between mt-4">
+        <button onclick="prevStep(2)" class="btn-secondary px-8 py-3">← Vissza</button>
+        <button onclick="nextStep(4)" class="btn-primary px-8 py-3">Következő →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Összefoglalás -->
+    <div id="step-4" class="step-panel hidden">
+      <div class="bg-white border border-[#1a1a18]/10 p-8">
+        <h2 class="font-garamond text-2xl font-medium mb-2">Összefoglalás és benyújtás</h2>
+        <p class="text-sm text-[#1a1a18]/50 mb-6">Kérjük, ellenőrizze az adatokat benyújtás előtt.</p>
+        <div id="summary-content" class="space-y-4 mb-6"></div>
+        <div class="border-t border-[#1a1a18]/10 pt-5">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="nyilatkozat" class="mt-0.5 w-4 h-4 flex-shrink-0" />
+            <span class="text-sm text-[#1a1a18]/60 leading-relaxed">Kijelentem, hogy az általam megadott adatok a valóságnak megfelelnek, és tudomásul veszem, hogy valótlan adatok megadása az Alaptörvény alapján jogi következményekkel jár.</span>
+          </label>
+        </div>
+      </div>
+      <div class="flex justify-between mt-4">
+        <button onclick="prevStep(3)" class="btn-secondary px-8 py-3">← Vissza</button>
+        <button onclick="submitForm()" id="submit-btn" class="btn-primary px-8 py-3">Kérelem benyújtása</button>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div id="success-panel" class="hidden bg-white border border-[#1a1a18]/10 p-10 text-center">
+      <div class="w-14 h-14 bg-green-50 border border-green-200 flex items-center justify-center mx-auto mb-5">
+        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2 class="font-garamond text-3xl font-medium mb-3">Kérelem sikeresen benyújtva!</h2>
+      <p class="text-[#1a1a18]/55 mb-2">Ügyszám: <span id="ugy-szam" class="font-mono font-medium text-[#1a1a18]">—</span></p>
+      <p class="text-sm text-[#1a1a18]/45 mb-8 leading-relaxed max-w-md mx-auto">A kérelmet az illetékes önkormányzat 5 munkanapon belül elbírálja. Az értesítést a Kormányzati Üzenetek oldalon és Discord-on keresztül küldjük el.</p>
+      <div class="flex gap-3 justify-center">
+        <a href="uzenetek.html" class="btn-secondary px-6 py-2.5 text-sm">Üzenetek megtekintése</a>
+        <a href="index.html" class="btn-primary px-6 py-2.5 text-sm">Főoldalra</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="auth.js"></script>
+<script src="cegalapit.js"></script>
+</body>
+</html>

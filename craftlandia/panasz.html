@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panasz és Jogorvoslat – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+  <header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-4 hover:opacity-80 transition-opacity">
+        <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center">
+          <span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span>
+        </div>
+        <div>
+          <div class="font-garamond text-lg font-semibold leading-tight">Craftlandia Ügyfélkapu</div>
+          <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Demokratikus Köztársaság</div>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <div class="mb-12">
+      <h1 class="font-garamond text-4xl font-medium mb-4">Panasz és Jogorvoslat</h1>
+      <p class="text-[#1a1a18]/60">Hivatali mulasztás, jogsérelem vagy határozat elleni fellebbezés benyújtása.</p>
+    </div>
+
+    <div class="bg-white border border-[#1a1a18]/10 p-8 shadow-sm">
+      <form id="panasz-form" class="space-y-6">
+        <div>
+          <label>Panasz típusa</label>
+          <select id="tipus" required>
+            <option value="hatarozat">Határozat elleni fellebbezés</option>
+            <option value="mulasztas">Hivatali mulasztás</option>
+            <option value="etikai">Etikai panasz</option>
+            <option value="egyeb">Egyéb jogsérelem</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Érintett szerv / hivatal</label>
+          <input type="text" id="hivatal" required placeholder="pl. Bazsi City Polgármesteri Hivatal" />
+        </div>
+
+        <div>
+          <label>Részletes leírás</label>
+          <textarea id="leiras" class="h-48" required placeholder="Kérjük, részletesen fejtse ki a panasz okát és a kért jogorvoslatot..."></textarea>
+        </div>
+
+        <div class="flex justify-end">
+          <button id="panasz-submit" type="button" onclick="submitPanasz()" class="btn-primary px-12 py-3 bg-red-800 hover:bg-red-900 border-red-900">Beadvány Beküldése</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    async function submitPanasz() {
+      if (!isLoggedIn()) { handleDiscordLogin(); return; }
+      
+      const tipus = document.getElementById('tipus').value;
+      const hivatal = document.getElementById('hivatal').value.trim();
+      const leiras = document.getElementById('leiras').value.trim();
+
+      if (!hivatal || !leiras) {
+        showToast('Kérjük, töltsön ki minden mezőt!');
+        return;
+      }
+
+      const btn = document.getElementById('panasz-submit');
+      btn.disabled = true; btn.textContent = 'Beküldés...';
+
+      try {
+        const res = await apiCall('/panasz/benyujt', {
+          method: 'POST',
+          body: JSON.stringify({ tipus, hivatal, leiras })
+        });
+        if (res && !res.error) {
+          alert('Panasz rögzítve (' + res.ugy_szam + '). Az Állami Számvevőszék 30 napon belül kivizsgálja az ügyet.');
+          window.location.href = 'index.html';
+        } else {
+          showToast('Hiba: ' + (res?.error || 'Szerverhiba történt.'));
+          btn.disabled = false; btn.textContent = 'Beadvány Beküldése';
+        }
+      } catch (e) {
+        showToast('Hálózati hiba: ' + e.message);
+        btn.disabled = false; btn.textContent = 'Beadvány Beküldése';
+      }
+    }
+  </script>
+</body>
+</html>

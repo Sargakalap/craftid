@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kormányzati Üzenetek – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+<header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-4 hover:opacity-70 transition-opacity">
+      <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center"><span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span></div>
+      <div>
+        <div class="font-garamond text-lg font-semibold">Craftlandia Ügyfélkapu</div>
+        <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Üzenetek</div>
+      </div>
+    </a>
+    <div id="auth-section">
+      <button id="login-btn" onclick="handleDiscordLogin()" class="flex items-center gap-2 bg-[#5865F2] text-white px-4 py-2 text-sm font-medium hover:bg-[#4752C4] transition-colors">Bejelentkezés</button>
+      <div id="user-info" class="hidden items-center gap-3">
+        <img id="user-avatar" class="w-8 h-8 rounded-full border border-[#1a1a18]/20" src="" alt="">
+        <div id="user-name" class="text-sm font-medium"></div>
+        <button onclick="handleLogout()" class="text-xs text-[#1a1a18]/40 hover:text-[#1a1a18] ml-2">Kilépés</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-12">
+  <nav class="flex items-center gap-2 font-mono text-xs text-[#1a1a18]/40 mb-8">
+    <a href="index.html" class="hover:text-[#1a1a18]">Főoldal</a><span>/</span><span class="text-[#1a1a18]">Üzenetek</span>
+  </nav>
+
+  <div class="page-header">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="font-garamond text-4xl font-medium mb-2">Kormányzati Üzenetek</h1>
+        <p class="text-[#1a1a18]/55">Értesítések, határozatok és levelek a Kormánytól és az önkormányzatoktól.</p>
+      </div>
+      <button onclick="markAllRead()" class="btn-secondary px-5 py-2.5 text-sm hidden md:block">Összes olvasottnak jelöl</button>
+    </div>
+  </div>
+
+  <div id="auth-gate" class="hidden bg-white border border-[#1a1a18]/10 p-10 text-center">
+    <div class="font-garamond text-2xl font-medium mb-3">Bejelentkezés szükséges</div>
+    <p class="text-sm text-[#1a1a18]/50 mb-6">Az üzenetek megtekintéséhez kérjük, jelentkezzen be Discord fiókjával.</p>
+    <button onclick="handleDiscordLogin()" class="bg-[#5865F2] text-white px-6 py-2.5 text-sm font-medium hover:bg-[#4752C4] transition-colors">Bejelentkezés Discorddal</button>
+  </div>
+
+  <div id="messages-container" class="hidden">
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <button class="filter-btn active px-4 py-2 text-sm border border-[#1a1a18] bg-[#1a1a18] text-[#F5F3EE] font-mono text-xs tracking-wide" onclick="filterMsg('all', this)">Összes</button>
+      <button class="filter-btn px-4 py-2 text-sm border border-[#1a1a18]/20 font-mono text-xs tracking-wide hover:border-[#1a1a18]/40" onclick="filterMsg('unread', this)">Olvasatlan <span id="unread-count" class="ml-1 bg-red-500 text-white px-1.5 py-0.5 text-[10px] rounded-full">0</span></button>
+      <button class="filter-btn px-4 py-2 text-sm border border-[#1a1a18]/20 font-mono text-xs tracking-wide hover:border-[#1a1a18]/40" onclick="filterMsg('hatarozat', this)">Határozatok</button>
+      <button class="filter-btn px-4 py-2 text-sm border border-[#1a1a18]/20 font-mono text-xs tracking-wide hover:border-[#1a1a18]/40" onclick="filterMsg('ertesites', this)">Értesítések</button>
+      <button class="filter-btn px-4 py-2 text-sm border border-[#1a1a18]/20 font-mono text-xs tracking-wide hover:border-[#1a1a18]/40" onclick="filterMsg('ado', this)">Adóügyek</button>
+      <button class="filter-btn px-4 py-2 text-sm border border-[#1a1a18]/20 font-mono text-xs tracking-wide hover:border-[#1a1a18]/40" onclick="filterMsg('ceg', this)">Cégügyek</button>
+    </div>
+
+    <!-- Two-column layout -->
+    <div class="flex gap-0 border border-[#1a1a18]/10 bg-white" style="min-height:560px">
+      <!-- List -->
+      <div class="w-80 flex-shrink-0 border-r border-[#1a1a18]/10 overflow-y-auto" id="msg-list" style="max-height:640px"></div>
+      <!-- Detail -->
+      <div class="flex-1 p-8" id="msg-detail">
+        <div class="h-full flex flex-col items-center justify-center text-center">
+          <svg class="w-12 h-12 text-[#1a1a18]/15 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <p class="font-garamond text-xl text-[#1a1a18]/30">Válasszon üzenetet</p>
+          <p class="text-sm text-[#1a1a18]/25 mt-1 font-mono">a bal oldali listából</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="auth.js"></script>
+<script src="uzenetek.js"></script>
+</body>
+</html>

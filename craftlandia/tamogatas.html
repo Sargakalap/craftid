@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Támogatásigénylés – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+  <header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-4 hover:opacity-80 transition-opacity">
+        <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center">
+          <span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span>
+        </div>
+        <div>
+          <div class="font-garamond text-lg font-semibold leading-tight">Craftlandia Ügyfélkapu</div>
+          <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Demokratikus Köztársaság</div>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <div class="mb-12 text-center">
+      <h1 class="font-garamond text-4xl font-medium mb-4">Állami Támogatások</h1>
+      <p class="text-[#1a1a18]/60">Pályázatok, szociális segélyek és vállalkozásfejlesztési források.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Lakhatási támogatás -->
+      <div class="bg-white border border-[#1a1a18]/10 p-8 flex flex-col h-full">
+        <h3 class="font-garamond text-2xl font-medium mb-4">Lakhatási Támogatás</h3>
+        <p class="text-sm text-[#1a1a18]/50 mb-8 flex-1">Rászorultsági alapon igényelhető havi támogatás lakásfenntartási költségekhez. Keretösszeg: 15 000 KF / hó.</p>
+        <button onclick="alert('Jelenleg nincs nyitott pályázati ablak ebben a kategóriában.')" class="btn-secondary w-full py-3">Részletek</button>
+      </div>
+
+      <!-- Vállalkozásfejlesztés -->
+      <div class="bg-[#1a1a18] border border-[#1a1a18] p-8 flex flex-col h-full text-white">
+        <h3 class="font-garamond text-2xl font-medium mb-4">Startup Inkubátor 2026</h3>
+        <p class="text-sm text-white/50 mb-8 flex-1">Új vállalkozások indításához szükséges eszközbeszerzési támogatás. Maximális összeg: 500 000 KF.</p>
+        <button onclick="alert('Hamarosan indul a jelentkezés!')" class="btn-primary bg-white text-[#1a1a18] w-full py-3 hover:bg-white/90">Pályázás</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Okmányigénylés – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+<header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-4 hover:opacity-70 transition-opacity">
+      <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center"><span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span></div>
+      <div>
+        <div class="font-garamond text-lg font-semibold">Craftlandia Ügyfélkapu</div>
+        <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Okmányigénylés</div>
+      </div>
+    </a>
+    <div id="auth-section">
+      <button id="login-btn" onclick="handleDiscordLogin()" class="flex items-center gap-2 bg-[#5865F2] text-white px-4 py-2 text-sm font-medium hover:bg-[#4752C4] transition-colors">Bejelentkezés</button>
+      <div id="user-info" class="hidden items-center gap-3">
+        <img id="user-avatar" class="w-8 h-8 rounded-full border border-[#1a1a18]/20" src="" alt="">
+        <div id="user-name" class="text-sm font-medium"></div>
+        <button onclick="handleLogout()" class="text-xs text-[#1a1a18]/40 hover:text-[#1a1a18] ml-2">Kilépés</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 py-12">
+  <nav class="flex items-center gap-2 font-mono text-xs text-[#1a1a18]/40 mb-8">
+    <a href="index.html" class="hover:text-[#1a1a18]">Főoldal</a><span>/</span><span class="text-[#1a1a18]">Okmányigénylés</span>
+  </nav>
+
+  <div class="page-header">
+    <h1 class="font-garamond text-4xl font-medium mb-2">Okmányigénylés</h1>
+    <p class="text-[#1a1a18]/55 leading-relaxed">Craftlandia hivatalos okmányainak igénylése online. Az elkészült okmányokat az illetékes önkormányzat postázza, vagy személyesen veheti át.</p>
+  </div>
+
+  <!-- Okmánytípus választó -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10" id="okmany-grid">
+
+    <div class="okmany-card bg-white border border-[#1a1a18]/10 p-6 cursor-pointer hover:border-[#1a1a18]/35 transition-all group" onclick="selectOkmany('szemelyi', this)">
+      <div class="w-10 h-10 border border-[#1a1a18]/15 flex items-center justify-center mb-4 group-hover:bg-[#1a1a18] group-hover:border-[#1a1a18] transition-all">
+        <svg class="w-5 h-5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+      </div>
+      <h3 class="font-garamond text-xl font-medium mb-1">Személyi igazolvány</h3>
+      <p class="text-sm text-[#1a1a18]/50 mb-3">Új kiállítás, csere, pótlás.</p>
+      <div class="font-mono text-xs text-[#1a1a18]/35">Díj: 500 KF · 15 munkanap</div>
+    </div>
+
+    <div class="okmany-card bg-white border border-[#1a1a18]/10 p-6 cursor-pointer hover:border-[#1a1a18]/35 transition-all group" onclick="selectOkmany('lakcim', this)">
+      <div class="w-10 h-10 border border-[#1a1a18]/15 flex items-center justify-center mb-4 group-hover:bg-[#1a1a18] group-hover:border-[#1a1a18] transition-all">
+        <svg class="w-5 h-5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      </div>
+      <h3 class="font-garamond text-xl font-medium mb-1">Lakcímkártya</h3>
+      <p class="text-sm text-[#1a1a18]/50 mb-3">Állandó és ideiglenes lakcímet igazoló hatósági kártya.</p>
+      <div class="font-mono text-xs text-[#1a1a18]/35">Díj: 200 KF · 10 munkanap</div>
+    </div>
+
+    <div class="okmany-card bg-white border border-[#1a1a18]/10 p-6 cursor-pointer hover:border-[#1a1a18]/35 transition-all group" onclick="selectOkmany('utlevel', this)">
+      <div class="w-10 h-10 border border-[#1a1a18]/15 flex items-center justify-center mb-4 group-hover:bg-[#1a1a18] group-hover:border-[#1a1a18] transition-all">
+        <svg class="w-5 h-5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      </div>
+      <h3 class="font-garamond text-xl font-medium mb-1">Útlevél</h3>
+      <p class="text-sm text-[#1a1a18]/50 mb-3">Craftlandia biometrikus útlevél az EU-n belüli szabad mozgáshoz.</p>
+      <div class="font-mono text-xs text-[#1a1a18]/35">Díj: 2 000 KF · 30 munkanap</div>
+    </div>
+
+    <div class="okmany-card bg-white border border-[#1a1a18]/10 p-6 cursor-pointer hover:border-[#1a1a18]/35 transition-all group" onclick="selectOkmany('adoig', this)">
+      <div class="w-10 h-10 border border-[#1a1a18]/15 flex items-center justify-center mb-4 group-hover:bg-[#1a1a18] group-hover:border-[#1a1a18] transition-all">
+        <svg class="w-5 h-5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <h3 class="font-garamond text-xl font-medium mb-1">Adóigazolás</h3>
+      <p class="text-sm text-[#1a1a18]/50 mb-3">Hatósági igazolás adókötelezettségekről és befizetésekről.</p>
+      <div class="font-mono text-xs text-[#1a1a18]/35">Díj: 300 KF · 5 munkanap</div>
+    </div>
+
+    <div class="okmany-card bg-white border border-[#1a1a18]/10 p-6 cursor-pointer hover:border-[#1a1a18]/35 transition-all group" onclick="selectOkmany('anyakönyv', this)">
+      <div class="w-10 h-10 border border-[#1a1a18]/15 flex items-center justify-center mb-4 group-hover:bg-[#1a1a18] group-hover:border-[#1a1a18] transition-all">
+        <svg class="w-5 h-5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+      </div>
+      <h3 class="font-garamond text-xl font-medium mb-1">Anyakönyvi kivonat</h3>
+      <p class="text-sm text-[#1a1a18]/50 mb-3">Születési, házassági vagy halotti anyakönyvi kivonat másolat.</p>
+      <div class="font-mono text-xs text-[#1a1a18]/35">Díj: 400 KF · 7 munkanap</div>
+    </div>
+
+    <div class="okmany-card bg-white border border-[#1a1a18]/10 p-6 cursor-pointer hover:border-[#1a1a18]/35 transition-all group" onclick="selectOkmany('erkölcsi', this)">
+      <div class="w-10 h-10 border border-[#1a1a18]/15 flex items-center justify-center mb-4 group-hover:bg-[#1a1a18] group-hover:border-[#1a1a18] transition-all">
+        <svg class="w-5 h-5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      </div>
+      <h3 class="font-garamond text-xl font-medium mb-1">Erkölcsi bizonyítvány</h3>
+      <p class="text-sm text-[#1a1a18]/50 mb-3">Hatósági erkölcsi bizonyítvány munkavállaláshoz vagy egyéb célra.</p>
+      <div class="font-mono text-xs text-[#1a1a18]/35">Díj: 1 000 KF · 10 munkanap</div>
+    </div>
+
+  </div>
+
+  <!-- Igénylési form (hidden until selection) -->
+  <div id="okmany-form" class="hidden">
+    <div class="section-divider"><span id="form-title">Kérelem kitöltése</span></div>
+
+    <div class="bg-white border border-[#1a1a18]/10 p-8">
+      <div class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label>Kérelmező neve *</label>
+            <input type="text" id="ok-nev" placeholder="Teljes születési név" />
+          </div>
+          <div>
+            <label>Születési dátum *</label>
+            <input type="date" id="ok-szuldat" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label>Anyja neve *</label>
+            <input type="text" id="ok-anyja" placeholder="Anyja teljes neve" />
+          </div>
+          <div>
+            <label>Születési hely *</label>
+            <input type="text" id="ok-szulhely" placeholder="Város, ország" />
+          </div>
+        </div>
+        <div>
+          <label>Kézbesítés módja *</label>
+          <select id="ok-kezb">
+            <option value="posta">Postai kézbesítés (+ 100 KF)</option>
+            <option value="szemelyes">Személyes átvétel az önkormányzatnál</option>
+          </select>
+        </div>
+        <div id="ok-cim-wrap">
+          <label>Postázási cím *</label>
+          <input type="text" id="ok-cim" placeholder="Irányítószám, utca, házszám" />
+        </div>
+        <div class="border border-[#1a1a18]/10 bg-[#F5F3EE] p-4 flex items-center justify-between">
+          <span class="font-mono text-xs text-[#1a1a18]/50 uppercase tracking-wide">Fizetendő díj</span>
+          <span class="font-garamond text-2xl font-medium" id="ok-dij">— KF</span>
+        </div>
+        <div>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="ok-nyilatkozat" class="mt-0.5 w-4 h-4 flex-shrink-0" />
+            <span class="text-sm text-[#1a1a18]/60 leading-relaxed">Kijelentem, hogy a megadott adatok valósak, és az okmányigénylés feltételei fennállnak.</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-3 mt-4">
+      <button onclick="submitOkmany()" id="ok-submit" class="btn-primary px-8 py-3">Igénylés benyújtása</button>
+      <button onclick="cancelOkmany()" class="btn-secondary px-6 py-3">Mégsem</button>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div id="ok-success" class="hidden bg-white border border-[#1a1a18]/10 p-10 text-center mt-8">
+    <div class="w-14 h-14 bg-green-50 border border-green-200 flex items-center justify-center mx-auto mb-5">
+      <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h2 class="font-garamond text-3xl font-medium mb-2">Igénylés sikeresen benyújtva!</h2>
+    <p class="text-sm text-[#1a1a18]/50 mb-2">Ügyszám: <span id="ok-ugy" class="font-mono font-medium text-[#1a1a18]">—</span></p>
+    <p class="text-sm text-[#1a1a18]/45 mb-8 leading-relaxed max-w-md mx-auto">Az okmány elkészítéséről és kézbesítéséről értesítést küldünk az Üzenetek oldalon.</p>
+    <div class="flex gap-3 justify-center">
+      <a href="uzenetek.html" class="btn-secondary px-6 py-2.5 text-sm">Üzenetek</a>
+      <a href="index.html" class="btn-primary px-6 py-2.5 text-sm">Főoldalra</a>
+    </div>
+  </div>
+
+</main>
+
+<script src="auth.js"></script>
+<script src="okmanyok.js"></script>
+</body>
+</html>

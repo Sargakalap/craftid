@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Építési Engedély – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+  <header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-4 hover:opacity-80 transition-opacity">
+        <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center">
+          <span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span>
+        </div>
+        <div>
+          <div class="font-garamond text-lg font-semibold leading-tight">Craftlandia Ügyfélkapu</div>
+          <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Demokratikus Köztársaság</div>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <div class="mb-12">
+      <nav class="flex items-center gap-2 text-xs font-mono text-[#1a1a18]/40 uppercase mb-4">
+        <a href="index.html" class="hover:text-[#1a1a18]">Főoldal</a>
+        <span>/</span>
+        <span class="text-[#1a1a18]">Építési Engedély</span>
+      </nav>
+      <h1 class="font-garamond text-4xl font-medium mb-4">Építési Engedélyezési Eljárás</h1>
+      <p class="text-[#1a1a18]/60 max-w-2xl">Új épület építése, bővítése vagy bontása esetén kezdeményezhető hatósági eljárás.</p>
+    </div>
+
+    <div class="bg-white border border-[#1a1a18]/10 p-8 shadow-sm">
+      <div class="mb-10 p-6 bg-red-50 border border-red-100 flex items-start gap-4">
+        <svg class="w-6 h-6 text-red-800 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <div>
+          <h4 class="text-sm font-bold text-red-800 mb-1">Figyelem!</h4>
+          <p class="text-xs text-red-800/70 leading-relaxed">Az engedély nélküli építkezés az Alaptörvény és a helyi építési szabályzat értelmében építménybontást és jelentős bírságot von maga után.</p>
+        </div>
+      </div>
+
+      <form id="epites-form" class="space-y-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <label>Település</label>
+            <select id="telepules" required>
+              <option value="">Válasszon...</option>
+              <option value="bazsi_city">Bazsi City</option>
+              <option value="vasfalu">Vasfalu</option>
+              <option value="palotas">Palotás</option>
+              <option value="rozsaváros">Rózsaváros</option>
+            </select>
+          </div>
+          <div>
+            <label>Helyrajzi szám (HRZ)</label>
+            <input type="text" id="hrz" required placeholder="pl. 1245/2/A" />
+          </div>
+        </div>
+
+        <div>
+          <label>Tervezett tevékenység leírása</label>
+          <textarea id="leiras" class="h-32" required placeholder="pl. Családi ház építése, 120 nm alapterületen..."></textarea>
+        </div>
+
+        <div>
+          <label>Tervdokumentáció feltöltése (Link)</label>
+          <input type="url" id="terv-link" required placeholder="pl. Google Drive vagy Imgur link a tervekről" />
+          <p class="text-[10px] text-[#1a1a18]/40 mt-1 font-mono uppercase">Csak nyilvánosan elérhető linket fogadunk el</p>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="button" onclick="alert('Fejlesztés alatt: A dokumentumok feldolgozása hamarosan elérhető lesz.')" class="btn-primary px-12 py-3 opacity-50 cursor-not-allowed">Kérelem Benyújtása</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+</body>
+</html>

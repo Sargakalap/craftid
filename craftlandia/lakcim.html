@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lakcímbejelentés – Craftlandia Ügyfélkapu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+  <header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-4 hover:opacity-80 transition-opacity">
+        <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center">
+          <span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span>
+        </div>
+        <div>
+          <div class="font-garamond text-lg font-semibold leading-tight">Craftlandia Ügyfélkapu</div>
+          <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">Demokratikus Köztársaság</div>
+        </div>
+      </a>
+      <div id="user-info-header" class="text-sm font-mono text-[#1a1a18]/40"></div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <div class="mb-12">
+      <nav class="flex items-center gap-2 text-xs font-mono text-[#1a1a18]/40 uppercase mb-4">
+        <a href="index.html" class="hover:text-[#1a1a18]">Főoldal</a>
+        <span>/</span>
+        <span class="text-[#1a1a18]">Lakcímbejelentés</span>
+      </nav>
+      <h1 class="font-garamond text-4xl font-medium mb-4">Lakcímbejelentés</h1>
+      <p class="text-[#1a1a18]/60 max-w-2xl">Állandó vagy ideiglenes lakóhely bejelentése, illetve változásbejelentés.</p>
+    </div>
+
+    <div class="bg-white border border-[#1a1a18]/10 p-8 shadow-sm">
+      <form id="lakcim-form" onsubmit="submitLakcim(event)" class="space-y-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <label>Bejelentés típusa</label>
+            <select id="tipus" required>
+              <option value="allando">Állandó lakóhely (lakóhely)</option>
+              <option value="ideiglenes">Tartózkodási hely (ideiglenes)</option>
+            </select>
+          </div>
+          <div>
+            <label>Bejelentő neve</label>
+            <input type="text" id="nev" required placeholder="Teljes név" />
+          </div>
+        </div>
+
+        <div class="border-t border-[#1a1a18]/05 pt-8">
+          <h3 class="font-garamond text-xl font-medium mb-6">Új lakcím adatai</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+            <div>
+              <label>Település</label>
+              <select id="telepules" required>
+                <option value="">Válasszon...</option>
+                <option value="bazsi_city">Bazsi City (főváros)</option>
+                <option value="vasfalu">Vasfalu</option>
+                <option value="palotas">Palotás</option>
+                <option value="rozsaváros">Rózsaváros</option>
+              </select>
+            </div>
+            <div>
+              <label>Irányítószám</label>
+              <input type="text" id="irsz" required placeholder="pl. 1000" />
+            </div>
+          </div>
+          <div>
+            <label>Utca, házszám, emelet/ajtó</label>
+            <input type="text" id="utca" required placeholder="pl. Alkotmány utca 12. 2/4." />
+          </div>
+        </div>
+
+        <div class="p-6 bg-[#F5F3EE]/50 border border-[#1a1a18]/05">
+          <div class="flex items-start gap-3">
+            <input type="checkbox" id="nyilatkozat" required class="mt-1" />
+            <label for="nyilatkozat" class="text-xs text-[#1a1a18]/60 leading-relaxed italic">
+              Büntetőjogi felelősségem tudatában kijelentem, hogy a megadott adatok a valóságnak megfelelnek, és rendelkezem a szállásadó (tulajdonos) hozzájárulásával a bejelentkezéshez.
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="submit" class="btn-primary px-12 py-3">Bejelentés elküldése</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    async function submitLakcim(e) {
+      e.preventDefault();
+      if (!isLoggedIn()) { handleDiscordLogin(); return; }
+
+      const data = {
+        tipus: document.getElementById('tipus').value,
+        nev: document.getElementById('nev').value,
+        telepules: document.getElementById('telepules').value,
+        irsz: document.getElementById('irsz').value,
+        utca: document.getElementById('utca').value
+      };
+      
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = 'Beküldés...';
+
+      try {
+        const res = await apiCall('/lakcim/bejelent', { 
+          method: 'POST', 
+          body: JSON.stringify(data) 
+        });
+        if (res && !res.error) {
+          alert('Lakcímbejelentés sikeresen beküldve! (Ügyszám: ' + res.ugy_szam + '). Az üzenetek között kap értesítést a feldolgozásról.');
+          window.location.href = 'index.html';
+        } else {
+          showToast('Hiba: ' + (res?.error || 'Ismeretlen hiba'));
+          btn.disabled = false; btn.textContent = 'Bejelentés elküldése';
+        }
+      } catch (err) {
+        showToast('Hálózati hiba: ' + err.message);
+        btn.disabled = false; btn.textContent = 'Bejelentés elküldése';
+      }
+    }
+  </script>
+
+</body>
+</html>

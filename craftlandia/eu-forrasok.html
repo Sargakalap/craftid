@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EU Forráskövetés – Craftlandia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#F5F3EE] text-[#1a1a18] min-h-screen">
+
+<!-- Header -->
+<header class="border-b border-[#1a1a18]/15 bg-[#F5F3EE]/95 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <a href="index.html" class="flex items-center gap-4 hover:opacity-70 transition-opacity">
+        <div class="w-10 h-10 bg-[#1a1a18] flex items-center justify-center">
+          <span class="text-[#F5F3EE] font-mono text-xs font-bold tracking-widest">CL</span>
+        </div>
+        <div>
+          <div class="font-garamond text-lg font-semibold leading-tight">Craftlandia Ügyfélkapu</div>
+          <div class="text-[10px] tracking-[0.2em] text-[#1a1a18]/50 uppercase font-mono">EU Forráskövetés</div>
+        </div>
+      </a>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="hidden md:flex items-center gap-2 text-xs font-mono text-[#1a1a18]/40">
+        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <span>Élő adatok</span>
+      </div>
+      <a href="index.html" class="text-sm text-[#1a1a18]/50 hover:text-[#1a1a18] transition-colors">← Vissza</a>
+    </div>
+  </div>
+</header>
+
+<!-- EU accent bar -->
+<div class="h-1 bg-[#003399]"></div>
+
+<main class="max-w-7xl mx-auto px-6 py-12">
+
+  <!-- Hero -->
+  <section class="mb-12">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-6 flex flex-col justify-center gap-px">
+            <!-- EU flag mini -->
+            <div class="text-lg leading-none text-center">🇪🇺</div>
+          </div>
+          <span class="font-mono text-xs tracking-[0.2em] text-[#1a1a18]/40 uppercase">Nyilvános · Átlátható · Valós idejű</span>
+        </div>
+        <h1 class="font-garamond text-5xl font-medium mb-3">EU Forráskövetés</h1>
+        <p class="text-[#1a1a18]/55 max-w-xl leading-relaxed">
+          Az Alaptörvény 11. cikke alapján minden EU-s forrás felhasználása nyilvánosan hozzáférhető. 
+          A Kormány közvetítő szervként köteles a támogatásokat teljes összegben, célhoz kötötten továbbítani.
+        </p>
+      </div>
+      <div class="flex-shrink-0">
+        <div class="bg-white border border-[#1a1a18]/10 p-5 text-right">
+          <div class="font-mono text-xs text-[#1a1a18]/40 mb-1">Utolsó frissítés</div>
+          <div class="font-garamond text-lg" id="last-updated">—</div>
+          <div class="font-mono text-xs text-[#1a1a18]/30 mt-1">Craftlandia Számvevőszék</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary cards -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+    <div class="bg-white border border-[#1a1a18]/10 p-5">
+      <div class="font-mono text-xs text-[#1a1a18]/40 uppercase tracking-wide mb-2">Összes keret</div>
+      <div class="font-garamond text-3xl font-medium text-[#003399]" id="total-budget">—</div>
+      <div class="font-mono text-xs text-[#1a1a18]/30 mt-1">KF</div>
+    </div>
+    <div class="bg-white border border-[#1a1a18]/10 p-5">
+      <div class="font-mono text-xs text-[#1a1a18]/40 uppercase tracking-wide mb-2">Kifizetett</div>
+      <div class="font-garamond text-3xl font-medium text-green-700" id="total-paid">—</div>
+      <div class="font-mono text-xs text-[#1a1a18]/30 mt-1">KF</div>
+    </div>
+    <div class="bg-white border border-[#1a1a18]/10 p-5">
+      <div class="font-mono text-xs text-[#1a1a18]/40 uppercase tracking-wide mb-2">Folyamatban</div>
+      <div class="font-garamond text-3xl font-medium text-amber-600" id="total-pending">—</div>
+      <div class="font-mono text-xs text-[#1a1a18]/30 mt-1">KF</div>
+    </div>
+    <div class="bg-white border border-[#1a1a18]/10 p-5">
+      <div class="font-mono text-xs text-[#1a1a18]/40 uppercase tracking-wide mb-2">Projektek</div>
+      <div class="font-garamond text-3xl font-medium" id="total-projects">—</div>
+      <div class="font-mono text-xs text-[#1a1a18]/30 mt-1">db</div>
+    </div>
+  </section>
+
+  <!-- Overall progress -->
+  <section class="bg-white border border-[#1a1a18]/10 p-6 mb-8">
+    <div class="flex items-center justify-between mb-4">
+      <div class="font-mono text-xs tracking-[0.15em] uppercase text-[#1a1a18]/50">Felhasználási arány</div>
+      <div class="font-garamond text-lg" id="usage-pct">—%</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="usage-bar" style="width:0%"></div>
+    </div>
+    <div class="flex justify-between mt-2 font-mono text-xs text-[#1a1a18]/30">
+      <span>0 KF</span>
+      <span id="budget-label">—</span>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="flex flex-wrap items-center gap-3 mb-6">
+    <div class="flex-1 min-w-48">
+      <input type="text" id="search-input" placeholder="Keresés projekt neve, önkormányzat szerint..." class="w-full" />
+    </div>
+    <select id="filter-status" class="w-44">
+      <option value="">Minden állapot</option>
+      <option value="approved">Jóváhagyott</option>
+      <option value="processing">Folyamatban</option>
+      <option value="paid">Kifizetett</option>
+      <option value="rejected">Elutasított</option>
+    </select>
+    <select id="filter-category" class="w-44">
+      <option value="">Minden kategória</option>
+      <option value="infrastructure">Infrastruktúra</option>
+      <option value="education">Oktatás</option>
+      <option value="environment">Környezetvédelem</option>
+      <option value="economy">Gazdaságfejlesztés</option>
+      <option value="health">Egészségügy</option>
+    </select>
+    <button onclick="applyFilters()" class="btn-primary px-5 py-2.5 text-sm">Szűrés</button>
+    <button onclick="resetFilters()" class="btn-secondary px-4 py-2.5 text-sm">Reset</button>
+  </section>
+
+  <!-- Data table -->
+  <section class="bg-white border border-[#1a1a18]/10 overflow-hidden mb-8">
+    <div class="border-b border-[#1a1a18]/08 px-6 py-4 flex items-center justify-between">
+      <span class="font-mono text-xs tracking-[0.15em] uppercase text-[#1a1a18]/50">Projektek listája</span>
+      <button onclick="exportCSV()" class="text-xs font-mono text-[#1a1a18]/40 hover:text-[#1a1a18] transition-colors flex items-center gap-1">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        CSV letöltés
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Projekt azonosító</th>
+            <th>Projekt neve</th>
+            <th>Önkormányzat</th>
+            <th>Kategória</th>
+            <th>Összeg (KF)</th>
+            <th>Állapot</th>
+            <th>Dátum</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="projects-table">
+          <tr><td colspan="8" class="text-center py-12 text-[#1a1a18]/30 font-mono text-sm">Adatok betöltése...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="border-t border-[#1a1a18]/08 px-6 py-3 flex items-center justify-between">
+      <span class="font-mono text-xs text-[#1a1a18]/40" id="table-count">— projekt</span>
+      <div class="flex items-center gap-2">
+        <button onclick="prevPage()" id="prev-btn" class="btn-secondary px-3 py-1.5 text-xs disabled:opacity-30" disabled>← Előző</button>
+        <span class="font-mono text-xs text-[#1a1a18]/40" id="page-info">1 / 1</span>
+        <button onclick="nextPage()" id="next-btn" class="btn-secondary px-3 py-1.5 text-xs">Következő →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category breakdown -->
+  <section class="mb-12">
+    <div class="section-divider"><span>Kategóriánkénti bontás</span></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="category-cards">
+      <!-- Filled by JS -->
+    </div>
+  </section>
+
+  <!-- Legal note -->
+  <section class="border border-[#003399]/20 bg-[#003399]/03 p-6">
+    <div class="flex items-start gap-4">
+      <div class="text-[#003399] text-xl flex-shrink-0">§</div>
+      <div>
+        <div class="font-mono text-xs tracking-wide uppercase text-[#003399] mb-2">Jogalap – Alaptörvény 11. cikk</div>
+        <p class="text-sm text-[#1a1a18]/60 leading-relaxed">
+          Minden uniós forrás felhasználásáról az érintett helyi önkormányzat nyilvánosan hozzáférhető elszámolást köteles közzétenni. 
+          Az elszámolás megtagadása vagy meghamisítása közhatalommal való visszaélésnek minősül. 
+          A Craftlandia Számvevőszék évente felülvizsgálja az uniós és állami költségvetési források felhasználását.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Project detail modal -->
+<div id="detail-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-[#F5F3EE] border border-[#1a1a18]/20 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+    <div class="p-6 border-b border-[#1a1a18]/10 flex items-center justify-between">
+      <h3 class="font-garamond text-xl font-medium">Projekt részletek</h3>
+      <button onclick="closeDetailModal()" class="text-[#1a1a18]/40 hover:text-[#1a1a18] transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-6" id="detail-content"><!-- filled by JS --></div>
+  </div>
+</div>
+
+<footer class="border-t border-[#1a1a18]/10 mt-16">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-6 h-6 bg-[#1a1a18] flex items-center justify-center">
+        <span class="text-[#F5F3EE] font-mono text-[8px] font-bold">CL</span>
+      </div>
+      <span class="text-sm text-[#1a1a18]/50">Craftlandia Számvevőszék · Nyilvános adat</span>
+    </div>
+    <div class="font-mono text-xs text-[#1a1a18]/30">Az adatok az Alaptörvény 11. cikke alapján kötelezően nyilvánosak.</div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="eu-forrasok.js"></script>
+</body>
+</html>
