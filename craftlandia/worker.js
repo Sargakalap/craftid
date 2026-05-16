@@ -3,9 +3,9 @@
 
 const DISCORD_CLIENT_ID = '1246462744870256731';
 const DISCORD_CLIENT_SECRET = 'cwudpxlbWiMXtlqH2K_4LMatgoLTB-qS';
-const REDIRECT_URI = 'http://localhost:8787/api/auth/discord/callback';
-const FRONTEND_URL = 'http://localhost:5500/craftlandia';
-const FRONTEND_ORIGIN = 'http://localhost:5500';
+const REDIRECT_URI = 'https://craftlandia-ugyfelkapu.koalabalazsnemeth.workers.dev/api/auth/discord/callback';
+const FRONTEND_URL = 'https://craftlandia-ugyfelkapu.pages.dev/';
+const FRONTEND_ORIGIN = 'https://craftlandia-ugyfelkapu.pages.dev';
 const JWT_SECRET = 'k2M5tRqS8vW3uI1oE7aB6fZ9yX0dP4hG';
 
 // ─── Router ────────────────────────────────────────────────
